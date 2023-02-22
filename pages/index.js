@@ -14,12 +14,12 @@ export default function Home({about, banner, login, navbar, services, signUp}) {
       </Head>
       <main className="">
         <LandingPage 
-          about={about} 
-          banner={banner.length && banner} 
-          login={login} 
+          about={about.length && about[0]} 
+          banner={banner.length && banner[0]} 
+          login={login.length && login[0]} 
           navbar={navbar.length && navbar[0]} 
-          services={services} 
-          signUp={signUp} />
+          services={services.length && services} 
+          signUp={signUp.length && signUp[0]} />
       </main>
     </>
   )
