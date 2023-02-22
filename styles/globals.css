@@ -7,6 +7,10 @@
   font-family: 'Nunito', sans-serif;
 }
 
+a {
+  text-decoration: none;
+}
+
 :root {
   --primary: #007FFF;
   --primaryDark: #17224D;

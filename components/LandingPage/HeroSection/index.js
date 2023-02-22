@@ -4,6 +4,7 @@ import { Hero2BtnWrapper, Hero2H1, Hero2H2, Hero2P, HeroImg, HeroSection2Contain
 import img from '../../../public/images/svg-medical-care.svg'
 import blob from '../../../public/images/blob2.png'
 import { urlFor } from '@/lib/client';
+import Link from 'next/link';
 
 const HeroSection = ({data: { title, blob, image, description, buttonText}}) => {
     const [hover, setHover] = useState(false);
@@ -21,13 +22,15 @@ const HeroSection = ({data: { title, blob, image, description, buttonText}}) => 
             <Hero2H2 primary='true'></Hero2H2>
             <Hero2P>{description}</Hero2P>
             <Hero2BtnWrapper>
-                <HeroButton to="/sign-in" 
-                onMouseEnter={onHover} 
-                onMouseLeave={onHover}
-                primary='true'
-                dark='true'>
-                    {buttonText} {hover ? <ArrowForward /> : <ArrowRight />}
-                </HeroButton>
+                <Link href='sign-in'>
+                    <HeroButton to="/sign-in" 
+                        onMouseEnter={onHover} 
+                        onMouseLeave={onHover}
+                        primary='true'
+                        dark='true'>
+                        {buttonText} {hover ? <ArrowForward /> : <ArrowRight />}
+                    </HeroButton>
+                </Link>
             </Hero2BtnWrapper>
         </TextContent>
         {/* <Hero2Gradient /> */}

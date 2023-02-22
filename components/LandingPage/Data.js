@@ -16,7 +16,8 @@ export const homeObjOne = {
     alt: 'Car',
     dark: false,
     primary: true,
-    darkText: true
+    darkText: true,
+    link: 'employer-sign-in'
 }
 export const homeObjTwo = {
     id: 'discover',
@@ -32,7 +33,8 @@ export const homeObjTwo = {
     alt: 'Car',
     dark: false,
     primary: true,
-    darkText: true
+    darkText: true,
+    link: 'sign-in'
 }
 export const homeObjThree = {
     id: 'signup',
@@ -48,5 +50,6 @@ export const homeObjThree = {
     alt: 'Car',
     dark: false,
     primary: true,
-    darkText: true
+    darkText: true,
+    link: 'sign-in'
 }

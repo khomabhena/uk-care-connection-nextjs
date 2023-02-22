@@ -5,6 +5,7 @@ import { IconContext } from 'react-icons/lib'
 import { animateScroll as scroll } from 'react-scroll'
 import logo from '../../../public/images/logo-big.PNG'
 import { urlFor } from '@/lib/client'
+import Link from 'next/link'
 
 const Navbar = ({ toggle, data: { logo, buttonText } }) => {
 
@@ -59,9 +60,11 @@ const Navbar = ({ toggle, data: { logo, buttonText } }) => {
                         >Sign Up</NavLinks>
                     </NavItem>
                 </NavMenu>
-                <NavBtn>
-                    <NavBtnLink to="/employer-sign-in">{buttonText}</NavBtnLink>
-                </NavBtn>
+                    <NavBtn>
+                        <Link href='employer-sign-in'>
+                            <NavBtnLink>{buttonText}</NavBtnLink>
+                        </Link>
+                    </NavBtn>
             </NavbarContainer>
         </Nav>
     </IconContext.Provider>
