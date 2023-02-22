@@ -20,6 +20,11 @@
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.0",
     "react-icons": "^4.7.1",
-    "stripe": "^11.10.0"
+    "react-scroll": "^1.8.9",
+    "stripe": "^11.10.0",
+    "styled-components": "^5.3.6"
+  },
+  "devDependencies": {
+    "babel-plugin-styled-components": "^2.0.7"
   }
 }
