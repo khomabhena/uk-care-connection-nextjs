@@ -4,18 +4,13 @@ import { ErrorContainer, ErrorMessage, Input, Label, LeftSide, LoginButton, Logi
 import logo from '../../../public/images/logo-big.PNG'
 import svg from '../../../public/images/svg-signup.svg'
 import { ImWarning } from 'react-icons/im'
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from '../../../Firebase'
-import { AuthContext } from '../../Context/AuthContext'
-import { useNavigate } from 'react-router-dom'
 import { IconContext } from 'react-icons'
-import { FirebaseStorage } from '../../../controls'
+import Link from 'next/link'
+import { urlFor } from '@/lib/client'
 
 
-const SignUp = () => {
-    const navigate = useNavigate()
+const SignUp = ({data: {logo, image, smallTitle, title, buttonText}}) => {
 
-    const {setCurrentUser, setAuthCredentials} = useContext(AuthContext)
     const [error, setError] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
     const [password, setPassword] = useState('')
@@ -44,61 +39,22 @@ const SignUp = () => {
         lastName: '',
         email: ''
     })
-    // console.log(data)
-
-    const handleUploadData = async (uid) => {
-        setError(false)
-
-        try {
-            await FirebaseStorage().setData('applicants', data.email, {...data, uid: uid})
-            navigate('/applicant')
-        } catch (e) {
-            setError(true)
-            setErrorMessage(e.message)
-        }
-    } 
-
-    const handleSignup = (e) => {
-        setError(false)
-        e.preventDefault()
-        if (password !== confirmPassword) {
-            setError(true)
-            setErrorMessage('Passwords do not match!!')
-        } else {
-
-            createUserWithEmailAndPassword(auth, data.email, password)
-                .then((userCredential) => {
-                    // Signed in 
-                    const user = userCredential.user;
-                    setCurrentUser(JSON.stringify(user))
-                    localStorage.setItem('currentUser', JSON.stringify(user))
-                    setAuthCredentials(user.uid, user.email)
-
-                    handleUploadData(user.uid)
-                })
-                .catch((error) => {
-                    setError(true)
-                    setErrorMessage('Account with this Email already exists!!')
-                    // ..
-            });
-        }
-    }
 
   return (
     <LoginContainer>
         <LoginWrap>
             
             <LeftSide>
-                <LogoWrap to="/"><Logo src={logo} /></LogoWrap>
-                <Svg src={svg} />
+                <LogoWrap to="/"><Logo src={urlFor(logo)} /></LogoWrap>
+                <Svg src={urlFor(image)} />
             </LeftSide>
 
             <RightSide>
-                <TextWelcome>Let's Get Started</TextWelcome>
-                <TextSignIn>Sign Up and get access to all the features.</TextSignIn>
+                <TextWelcome>{title}</TextWelcome>
+                <TextSignIn>{smallTitle}</TextSignIn>
 
 
-                <LoginForm onSubmit={handleSignup}>
+                <LoginForm onSubmit=''>
                     <Label>First Name</Label>
                     <Input required type='text' placeholder='Enter your First Name' onChange={(e) => setData(prev => ({...prev, firstName: e.target.value}))} />
                     <Label>Last Name</Label>
@@ -117,8 +73,10 @@ const SignUp = () => {
                         <ErrorMessage>{errorMessage}</ErrorMessage>
                     </ErrorContainer>
 
-                    <LoginButton type='submit'>Sign Up</LoginButton>
-                    <SignupButton to="/sign-in">Already a member? Sign In</SignupButton>
+                    <LoginButton type='submit'>{buttonText}</LoginButton>
+                    <Link href='/sign-in'>    
+                        <SignupButton>Already a member? Sign In</SignupButton>
+                    </Link>
                 </LoginForm>
             </RightSide>
 

@@ -7,6 +7,7 @@ import { ImWarning } from 'react-icons/im'
 // import { auth } from '../../../Firebase'
 import { IconContext } from 'react-icons'
 import { urlFor } from '@/lib/client'
+import Link from 'next/link'
 // import { AuthContext } from '../../Context/AuthContext'
 // import { useNavigate } from 'react-router-dom'
 
@@ -51,7 +52,11 @@ const SignIn = ({data: {logo, image, smallTitle, title, buttonText}}) => {
                       <ForgotPassword>Forgot Password?</ForgotPassword>
                   </ForgotPasswordDiv>
                   <LoginButton type='submit'>{buttonText}</LoginButton>
-                  <SignupButton to="/sign-up">Don't have an account? Sign Up</SignupButton>
+                    <Link href='sign-up'>
+                        <SignupButton>
+                        Don't have an account? Sign Up
+                        </SignupButton>
+                    </Link>
               </LoginForm>
           </RightSide>
 
