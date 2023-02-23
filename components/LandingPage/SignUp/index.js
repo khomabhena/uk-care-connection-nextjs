@@ -45,7 +45,9 @@ const SignUp = ({data: {logo, image, smallTitle, title, buttonText}}) => {
         <LoginWrap>
             
             <LeftSide>
-                <LogoWrap to="/"><Logo src={urlFor(logo)} /></LogoWrap>
+                <Link href='/'>
+                    <LogoWrap to="/"><Logo src={urlFor(logo)} /></LogoWrap>
+                </Link>
                 <Svg src={urlFor(image)} />
             </LeftSide>
 
