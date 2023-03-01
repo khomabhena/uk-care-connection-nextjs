@@ -1,37 +1,70 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { ForgotPassword, ForgotPasswordDiv, LogoWrap, Input, Label, LeftSide, LoginButton, LoginContainer, LoginForm, LoginWrap, Logo, RightSide, SignupButton, Svg, TextSignin, TextWelcome, ErrorContainer, ErrorMessage } from './SignInElements'
-import logo from '../../../public/images/logo-big.PNG'
-import svg from '../../../public/images/svg-signin.svg'
 import { ImWarning } from 'react-icons/im'
-// import { signInWithEmailAndPassword } from "firebase/auth";
-// import { auth } from '../../../Firebase'
 import { IconContext } from 'react-icons'
 import { urlFor } from '@/lib/client'
 import Link from 'next/link'
-// import { AuthContext } from '../../Context/AuthContext'
-// import { useNavigate } from 'react-router-dom'
+import { useRouter } from 'next/router'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '@/lib/Firebase'
+import { toast } from 'react-hot-toast'
+import { useAuthContext } from '@/context/AuthContext'
+import { InfinitySpin } from 'react-loader-spinner'
 
 const SignIn = ({data: {logo, image, smallTitle, title, buttonText}}) => {
-    // const navigate = useNavigate()
 
-    // const {setCurrentUser, setAuthCredentials} = useContext(AuthContext)
     const [error, setError] = useState(false) 
     const [errorMessage, setErrorMessage] = useState('')
-    const [data, setData] = useState({
-        email: '',
-        password: ''
-    })
+    const { setAuthCredentials, isLoading, setIsLoading } = useAuthContext()
+    const router = useRouter()
 
-   
+   const signIn = (e) => {
+        e.preventDefault()
+        const email = document.querySelector('#sign-in-email').value
+        const password = document.querySelector('#sign-in-password').value
+        setIsLoading(true)
+
+        handleLogin(email, password)
+   }
+
+   const handleLogin = (email, password) => {
+        setError(false)
+
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user
+                setAuthCredentials(email)
+                toast.success('Logged in ' + email)
+                router.push('/applicant')
+                setIsLoading(false)
+
+            }).catch((error) => {
+                const errorCode = error.code
+                setError(true)
+                console.log(errorCode)
+                setErrorMessage(errorCode.includes('user-not-found') 
+                    ? 'User not Found' 
+                    : errorCode.includes('network') 
+                    ? 'Network connection error'
+                    : 'Incorrect Email or Password')
+                toast.error(errorCode.includes('user-not-found') 
+                    ? 'User not Found' 
+                    : errorCode.includes('network') 
+                    ? 'Network connection error'
+                    : 'Incorrect Email or Password')
+                setIsLoading(false)
+            })
+   }
 
   return (
     <LoginContainer>
       <LoginWrap> 
           <LeftSide>
-              <Link href='/'>
-                  <LogoWrap><Logo src={urlFor(logo)} /></LogoWrap>
-              </Link>
-              <Svg src={urlFor(image)} />
+                <Link href='/'>
+                    <LogoWrap><Logo src={urlFor(logo)} /></LogoWrap>
+                </Link>
+                {isLoading && <InfinitySpin width='200' color="var(--primaryDark)" />}
+                <Svg src={urlFor(image)} />
           </LeftSide>
 
           <RightSide>
@@ -45,11 +78,11 @@ const SignIn = ({data: {logo, image, smallTitle, title, buttonText}}) => {
                 <ErrorMessage>{errorMessage}</ErrorMessage>
               </ErrorContainer>
 
-              <LoginForm>
+              <LoginForm onSubmit={signIn}>
                   <Label>Email</Label>
-                  <Input type='email' required placeholder='Enter your email address' onChange={(e) => setData(prev => ({...prev, email: e.target.value}))} />
+                  <Input id='sign-in-email' type='email' required placeholder='Enter your email address'  />
                   <Label>Password</Label>
-                  <Input type='password' required minLength='6' placeholder='Enter your password' onChange={(e) => setData(prev => ({...prev, password: e.target.value}))} />
+                  <Input id='sign-in-password' type='password' required minLength='6' placeholder='Enter your password' />
                   <ForgotPasswordDiv to="/forgot-password">
                       <ForgotPassword>Forgot Password?</ForgotPassword>
                   </ForgotPasswordDiv>

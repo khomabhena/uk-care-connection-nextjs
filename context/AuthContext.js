@@ -10,29 +10,37 @@ export const AuthContext = ({ children }) => {
         }
     }
 
-    const [currentUser, setCurrentUser] = useState(getLocalStorage('currentUser') || null)
+    const setLocalStorage = (name, value) => {
+        if (typeof window !== 'undefined') {
+            localStorage.setItem(name, value)
+        }
+    }
+
+    const clearLocalStorage = () => {
+        if (typeof window !== 'undefined') {
+            localStorage.clear()
+        }
+    }
+
+
     const [userEmail, setUserEmail] = useState(getLocalStorage('userEmail') || '')
-    const [userUid, setUserUid] = useState(getLocalStorage('userUid') || '')
+    const [isLoading, setIsLoading] = useState(false)
    
     const logoutUser = () => {
-        setCurrentUser(null)
         setUserEmail('')
-        setUserUid('')
-        localStorage.clear()
+        clearLocalStorage()
         toast.success('Logged Out')
     }
 
-    const setAuthCredentials = (uid, email) => {
-        setUserUid(uid)
+    const setAuthCredentials = (email) => {
         setUserEmail(email)
-        localStorage.setItem('userUid', uid)
-        localStorage.setItem('userEmail', email)
+        setLocalStorage('userEmail', email)
     }
 
     return (
         <Context.Provider value={
             {
-                currentUser, setCurrentUser, userEmail, userUid,
+                userEmail, isLoading, setIsLoading,
                 logoutUser, setAuthCredentials
             }
         }>
